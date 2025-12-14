@@ -2,7 +2,7 @@ import type { SpectrumCard } from "../../../types";
 
 export const MODERN_LIFE_THEME: { name: string; image: string; cards: SpectrumCard[] } = {
   name: 'Modern Life',
-  image: '/static/themes/modern-life.png',
+  image: 'static/themes/modern-life.png',
   cards: [
   { left: "Life-Changing", right: "Barely Matters" },
   { left: "Overstimulating", right: "Understimulating" },

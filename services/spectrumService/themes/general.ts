@@ -2,7 +2,7 @@ import { SpectrumCard } from '../../../types';
 
 export const GENERAL_THEME: { name: string; image: string; cards: SpectrumCard[] } = {
   name: 'General',
-  image: '/static/themes/general.png',
+  image: 'static/themes/general.png',
   cards: [
   { left: "Overrated", right: "Underrated" },
   { left: "Highbrow", right: "Lowbrow" },

@@ -2,7 +2,7 @@ import type { SpectrumCard } from "../../../types";
 
 export const AFTER_DARK_BUT_TASTEFUL_THEME: { name: string; image: string; cards: SpectrumCard[] } = {
   name: 'After Dark (Tasteful)',
-  image: '/static/themes/after-dark-but-tasteful.png',
+  image: 'static/themes/after-dark-but-tasteful.png',
   cards: [
   { left: "Innocent", right: "Suggestive" },
   { left: "First-Date Energy", right: "Third-Date Energy" },

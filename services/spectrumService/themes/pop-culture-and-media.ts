@@ -2,7 +2,7 @@ import type { SpectrumCard } from "../../../types";
 
 export const POP_CULTURE_AND_MEDIA_THEME: { name: string; image: string; cards: SpectrumCard[] } = {
   name: 'Pop Culture & Media',
-  image: '/static/themes/pop-culture-and-media.png',
+  image: 'static/themes/pop-culture-and-media.png',
   cards: [
   { left: "Overhyped", right: "Deserves the Hype" },
   { left: "Instant Classic", right: "Flash in the Pan" },

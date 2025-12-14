@@ -2,7 +2,7 @@ import type { SpectrumCard } from "../../../types";
 
 export const TECH_AND_STARTUPS_THEME: { name: string; image: string; cards: SpectrumCard[] } = {
   name: 'Tech & Startups',
-  image: '/static/themes/tech-and-startups.png',
+  image: 'static/themes/tech-and-startups.png',
   cards: [
   { left: "Overengineered", right: "Elegant" },
   { left: "Disruptive", right: "Incremental" },

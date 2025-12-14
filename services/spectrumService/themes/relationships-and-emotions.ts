@@ -2,7 +2,7 @@ import type { SpectrumCard } from "../../../types";
 
 export const RELATIONSHIPS_AND_EMOTIONS_THEME: { name: string; image: string; cards: SpectrumCard[] } = {
   name: 'Relationships & Emotions',
-  image: '/static/themes/relationships-and-emotions.png',
+  image: 'static/themes/relationships-and-emotions.png',
   cards: [
   { left: "Emotionally Guarded", right: "Emotionally Open" },
   { left: "Low Maintenance", right: "High Maintenance" },

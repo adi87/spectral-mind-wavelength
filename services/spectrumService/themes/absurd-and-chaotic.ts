@@ -2,7 +2,7 @@ import type { SpectrumCard } from "../../../types";
 
 export const ABSURD_AND_CHAOTIC_THEME: { name: string; image: string; cards: SpectrumCard[] } = {
   name: 'Absurd & Chaotic',
-  image: '/static/themes/absurd-and-chaotic.png',
+  image: 'static/themes/absurd-and-chaotic.png',
   cards: [
   { left: "Barely a Thing", right: "Definitely a Thing" },
   { left: "Feels Illegal", right: "Feels Encouraged" },

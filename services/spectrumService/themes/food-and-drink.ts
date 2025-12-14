@@ -2,7 +2,7 @@ import type { SpectrumCard } from "../../../types";
 
 export const FOOD_AND_DRINK_THEME: { name: string; image: string; cards: SpectrumCard[] } = {
   name: 'Food & Drink',
-  image: '/static/themes/food-and-drink.png',
+  image: 'static/themes/food-and-drink.png',
   cards: [
   { left: "Comfort Food", right: "Fancy Food" },
   { left: "Overseasoned", right: "Underseasoned" },

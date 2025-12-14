@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { THEMES, Theme } from '../services/spectrumService/themes';
+import { getCustomTheme, getCustomCards } from '../services/spectrumService/themes/custom';
+import { CustomThemeEditor } from './CustomThemeEditor';
 
 interface ThemePickerProps {
   onSelectTheme: (theme: Theme) => void;
@@ -7,14 +9,37 @@ interface ThemePickerProps {
 
 export const ThemePicker: React.FC<ThemePickerProps> = ({ onSelectTheme }) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [showCustomEditor, setShowCustomEditor] = useState(false);
 
   const handleSelect = (theme: Theme, index: number) => {
+    // If it's the custom theme, show the editor instead
+    if (theme.name === 'Custom') {
+      setShowCustomEditor(true);
+      return;
+    }
+
     setSelectedIndex(index);
     // Small delay for visual feedback before transitioning
     setTimeout(() => {
       onSelectTheme(theme);
     }, 300);
   };
+
+  const handlePlayCustom = () => {
+    const customTheme = getCustomTheme();
+    if (customTheme.cards.length >= 3) {
+      onSelectTheme(customTheme);
+    }
+  };
+
+  if (showCustomEditor) {
+    return (
+      <CustomThemeEditor
+        onClose={() => setShowCustomEditor(false)}
+        onPlay={handlePlayCustom}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-start min-h-[80vh] animate-fade-in p-4 pb-12">

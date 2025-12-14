@@ -6,6 +6,7 @@ import { MODERN_LIFE_THEME } from './modern-life';
 import { POP_CULTURE_AND_MEDIA_THEME } from './pop-culture-and-media';
 import { RELATIONSHIPS_AND_EMOTIONS_THEME } from './relationships-and-emotions';
 import { TECH_AND_STARTUPS_THEME } from './tech-and-startups';
+import { CUSTOM_THEME } from './custom';
 import type { SpectrumCard } from '../../../types';
 
 export type Theme = {
@@ -23,6 +24,7 @@ export {
   POP_CULTURE_AND_MEDIA_THEME,
   RELATIONSHIPS_AND_EMOTIONS_THEME,
   TECH_AND_STARTUPS_THEME,
+  CUSTOM_THEME,
 };
 
 export const THEMES: Theme[] = [
@@ -34,4 +36,5 @@ export const THEMES: Theme[] = [
   AFTER_DARK_BUT_TASTEFUL_THEME,
   MODERN_LIFE_THEME,
   TECH_AND_STARTUPS_THEME,
+  CUSTOM_THEME,
 ];

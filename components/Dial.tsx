@@ -46,11 +46,11 @@ export const Dial: React.FC<DialProps> = React.memo(({
   // Convert 0-100 value to degrees (-90 to 90)
   const valueToDegrees = (val: number) => (val / 100) * 180 - 90;
   
-  // Memoize static background calculations
+  // Memoize static background calculations - high contrast colors
   const TARGET_ZONES = useMemo(() => [
-    { width: 20 * ONE_UNIT_DEG, color: '#eab308' }, // Yellow
-    { width: 10 * ONE_UNIT_DEG, color: '#3b82f6' }, // Blue
-    { width: 4 * ONE_UNIT_DEG, color: '#22c55e' },  // Green
+    { width: 20 * ONE_UNIT_DEG, color: '#fbbf24' }, // Amber/Gold outer (4 points)
+    { width: 10 * ONE_UNIT_DEG, color: '#22d3ee' }, // Cyan middle (3 points)
+    { width: 4 * ONE_UNIT_DEG, color: '#c084fc' },  // Light purple center (2 points - bullseye)
   ], []);
 
   const getPointerAngle = (val: number) => valueToDegrees(val);
@@ -147,68 +147,121 @@ export const Dial: React.FC<DialProps> = React.memo(({
         onMouseMove={onMouseMove}
         onTouchMove={onTouchMove}
       >
-        {/* LAYER 1: Target Zones */}
-        <svg viewBox="0 0 360 180" className={`absolute inset-0 w-full h-full overflow-visible z-0 transition-opacity duration-500 ease-in-out ${shouldShowTarget ? 'opacity-100' : 'opacity-0'}`}>
-            {TARGET_ZONES.map((zone, i) => {
-             const r = 160;
-             const c = 2 * Math.PI * r;
-             const segmentLength = (zone.width / 360) * c;
-             const gap = c - segmentLength;
-             
-             return (
-               <circle
+        {/* LAYER 1: Gradient Background Track */}
+        <svg viewBox="0 0 360 180" className="absolute inset-0 w-full h-full overflow-visible z-0 pointer-events-none">
+          <defs>
+            <linearGradient id="trackGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.3" />
+              <stop offset="50%" stopColor="#6366f1" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#ec4899" stopOpacity="0.3" />
+            </linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <path 
+            d="M 20 180 A 160 160 0 0 1 340 180" 
+            fill="none" 
+            stroke="url(#trackGradient)" 
+            strokeWidth={STROKE_WIDTH} 
+            strokeLinecap="round"
+          />
+        </svg>
+
+        {/* LAYER 2: Target Zones */}
+        <svg viewBox="0 0 360 180" className={`absolute inset-0 w-full h-full overflow-visible z-10 transition-opacity duration-500 ease-in-out ${shouldShowTarget ? 'opacity-100' : 'opacity-0'}`}>
+          {TARGET_ZONES.map((zone, i) => {
+            const r = 160;
+            const c = 2 * Math.PI * r;
+            const segmentLength = (zone.width / 360) * c;
+            const gap = c - segmentLength;
+            
+            return (
+              <circle
                 key={i}
                 cx="180"
                 cy="180"
                 r="160"
                 fill="none"
                 stroke={zone.color}
-                strokeWidth={STROKE_WIDTH}
+                strokeWidth={STROKE_WIDTH - 4}
                 strokeDasharray={`${segmentLength} ${gap}`}
                 strokeDashoffset={segmentLength / 2}
                 transform={`rotate(${valueToDegrees(targetValue) - 90}, 180, 180)`}
-               />
-             )
-           })}
+              />
+            )
+          })}
         </svg>
 
-        {/* LAYER 2: Hidden Indicator (Replaces Cover) */}
+        {/* LAYER 3: Hidden Indicator */}
         <div 
-            className={`absolute inset-0 z-10 flex items-end justify-center pb-8 transition-opacity duration-500 ease-in-out pointer-events-none ${shouldShowTarget ? 'opacity-0' : 'opacity-100'}`}
+            className={`absolute inset-0 z-20 flex items-end justify-center pb-8 transition-opacity duration-500 ease-in-out pointer-events-none ${shouldShowTarget ? 'opacity-0' : 'opacity-100'}`}
         >
-            <span className="text-zinc-700/50 font-black text-4xl tracking-[0.2em] select-none">HIDDEN</span>
+            <span className="text-zinc-600/40 font-black text-3xl tracking-[0.3em] select-none uppercase">Hidden</span>
         </div>
 
-        {/* LAYER 3: Base Track (Always Visible Frame) */}
-        <svg viewBox="0 0 360 180" className="absolute inset-0 w-full h-full overflow-visible z-20 pointer-events-none drop-shadow-xl">
-           <path 
+        {/* LAYER 4: Frame Overlay */}
+        <svg viewBox="0 0 360 180" className="absolute inset-0 w-full h-full overflow-visible z-30 pointer-events-none">
+          <defs>
+            <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#a855f7" />
+              <stop offset="50%" stopColor="#6366f1" />
+              <stop offset="100%" stopColor="#ec4899" />
+            </linearGradient>
+            <linearGradient id="pivotGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#a855f7" />
+              <stop offset="100%" stopColor="#6366f1" />
+            </linearGradient>
+          </defs>
+          {/* Outer arc frame */}
+          <path 
             d="M 20 180 A 160 160 0 0 1 340 180" 
             fill="none" 
-            stroke="#374151" 
-            strokeWidth={10} 
-            strokeLinecap="butt"
+            stroke="url(#frameGradient)" 
+            strokeWidth={3} 
+            strokeLinecap="round"
+            opacity="0.8"
           />
-           <line x1="180" y1="10" x2="180" y2="30" stroke="#4b5563" strokeWidth="4" />
-           <circle cx="180" cy="180" r="14" fill="white" stroke="#1f2937" strokeWidth="4" />
+          {/* Center tick mark */}
+          <line x1="180" y1="8" x2="180" y2="28" stroke="#a855f7" strokeWidth="3" strokeLinecap="round" opacity="0.6" />
+          {/* Center pivot */}
+          <circle cx="180" cy="180" r="16" fill="#18181b" stroke="url(#pivotGradient)" strokeWidth="3" />
+          <circle cx="180" cy="180" r="6" fill="#a855f7" />
         </svg>
 
-        {/* LAYER 4: Needle */}
+        {/* LAYER 5: Needle */}
         {showNeedle && (
-          <svg viewBox="0 0 360 180" className="absolute inset-0 w-full h-full overflow-visible z-30 pointer-events-none">
+          <svg viewBox="0 0 360 180" className="absolute inset-0 w-full h-full overflow-visible z-40 pointer-events-none">
+            <defs>
+              <linearGradient id="needleGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+              </linearGradient>
+              <filter id="needleShadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.5"/>
+              </filter>
+            </defs>
             <g 
               transform={`rotate(${getPointerAngle(internalValue)}, 180, 180)`} 
-              className={`${isDragging ? 'cursor-grabbing' : 'cursor-grab'} transition-transform duration-0 ease-linear pointer-events-auto`}
+              className={`${isDragging ? 'cursor-grabbing' : 'cursor-grab'} pointer-events-auto`}
+              filter="url(#needleShadow)"
             >
-              <line x1="180" y1="180" x2="180" y2="20" stroke="white" strokeWidth="4" strokeLinecap="round" className="drop-shadow-md" />
-              <circle cx="180" cy="20" r="6" fill="#ef4444" stroke="white" strokeWidth="2" />
+              {/* Needle body */}
+              <line x1="180" y1="170" x2="180" y2="30" stroke="white" strokeWidth="6" strokeLinecap="round" />
+              {/* Needle tip */}
+              <circle cx="180" cy="26" r="10" fill="#a855f7" stroke="white" strokeWidth="3" />
             </g>
           </svg>
         )}
       </div>
 
       <div className="flex justify-between w-full px-4 mt-2 text-sm md:text-xl font-black tracking-tight select-none z-0">
-        <div className="w-1/2 text-left pr-4 text-blue-300 leading-tight drop-shadow-lg">{leftLabel}</div>
-        <div className="w-1/2 text-right pl-4 text-red-300 leading-tight drop-shadow-lg">{rightLabel}</div>
+        <div className="w-1/2 text-left pr-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-indigo-400 leading-tight">{leftLabel}</div>
+        <div className="w-1/2 text-right pl-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-orange-400 leading-tight">{rightLabel}</div>
       </div>
 
     </div>

@@ -10,6 +10,7 @@ export type SpectrumCard = {
 };
 
 export enum GamePhase {
+  INTRO = 'INTRO',
   THEME_SELECT = 'THEME_SELECT',
   SETUP = 'SETUP',
   TURN_START = 'TURN_START',

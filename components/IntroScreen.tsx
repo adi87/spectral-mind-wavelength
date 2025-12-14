@@ -15,7 +15,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onContinue }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] animate-fade-in p-6">
+    <div className="flex flex-col items-center justify-center min-h-[80vh] animate-fade-in p-6 pb-24">
       {/* Logo/Title */}
       <div className="text-center mb-8">
         <img src="favicon-96x96.png" alt="Spectral Mind" className="w-20 h-20 mb-4 mx-auto" />
